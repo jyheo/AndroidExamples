@@ -8,8 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -86,16 +89,22 @@ public class MainActivity extends AppCompatActivity {
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView result = (TextView)findViewById(R.id.result);
                 String sql = "Select * FROM schedule";
                 Cursor cursor = helper.getReadableDatabase().rawQuery(sql,null);
+
+                /*TextView result = (TextView)findViewById(R.id.result);
                 StringBuffer buffer = new StringBuffer();
                 while (cursor.moveToNext()) {
                     buffer.append(cursor.getString(1)+"\t");
                     buffer.append(cursor.getString(2)+"\n");
                 }
-                result.setText(buffer);
+                result.setText(buffer);*/
 
+                SimpleCursorAdapter adapter = new SimpleCursorAdapter(getApplicationContext(),
+                        R.layout.item, cursor, new String[]{"title", "datetime"},
+                        new int[]{R.id.tvTitle, R.id.tvDate}, 0);
+                ListView lv = (ListView)findViewById(R.id.listview);
+                lv.setAdapter(adapter);
             }
         });
 
